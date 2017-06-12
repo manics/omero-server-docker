@@ -3,5 +3,7 @@
   - role: openmicroscopy.omero-server
   vars:
     ice_version: "3.6"
+    ice_install_devel: False
+    ice_python_wheel: /opt/setup/zeroc_ice-3.6.3-cp27-cp27mu-linux_x86_64.whl
     omero_server_database_manage: False
     omero_server_systemd_setup: False

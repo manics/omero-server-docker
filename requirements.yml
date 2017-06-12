@@ -3,8 +3,11 @@
 - src: openmicroscopy.basedeps
   version: 1.0.0
 
-- src: openmicroscopy.ice
-  version: 2.0.0
+#- src: openmicroscopy.ice
+#  version: 2.0.0
+- name: openmicroscopy.ice
+  src: https://github.com/manics/ansible-role-ice/archive/ice-devel-optional.tar.gz
+  version: ice-devel-optional
 
 - src: openmicroscopy.java
   version: 2.0.0
