@@ -1,4 +1,21 @@
 - hosts: localhost
+
+  pre_tasks:
+
+  - name: override omego | install python virtualenv
+    become: yes
+    yum:
+      name: python-virtualenv
+      state: present
+
+  - name: override omego | setup virtualenv
+    become: yes
+    pip:
+      name: https://github.com/manics/omego/archive/db-check.zip
+      state: present
+      virtualenv: /opt/omero/omego
+      virtualenv_site_packages: yes
+
   roles:
   - role: openmicroscopy.omero-server
   vars:
@@ -8,4 +25,4 @@
     omero_server_systemd_setup: False
     # You can reduce the size of the image by providing the URL to a
     # precompiled Ice Python wheel
-    #ice_python_wheel:
+    ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.2/zeroc_ice-3.6.3-cp27-cp27mu-linux_x86_64.whl
