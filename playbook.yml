@@ -9,4 +9,4 @@
     omero_server_system_uid: 1000
     # You can reduce the size of the image by providing the URL to a
     # precompiled Ice Python wheel
-    #ice_python_wheel:
+    ice_python_wheel: https://github.com/openmicroscopy/zeroc-ice-py-centos7/releases/download/0.0.3/zeroc_ice-3.6.4-cp27-cp27mu-linux_x86_64.whl
