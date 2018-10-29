@@ -1,7 +1,10 @@
 OMERO.server Docker
 ===================
 
-A CentOS 7 based Docker image for OMERO.server.
+A CentOS 7 based Docker image for running custom OMERO.server builds.
+
+This is the standard omero-server Docker image without OMERO.server with no ports exposed and no volumes defined.
+You should copy or mount your own OMERO.server to `/opt/omero/server/OMERO.server`, expose any ports and create any volumes as required.
 
 Also see [SUPPORT.md](./SUPPORT.md)
 
