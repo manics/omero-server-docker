@@ -23,6 +23,11 @@ RUN curl -L -o /usr/local/bin/dumb-init \
 ADD entrypoint.sh /usr/local/bin/
 ADD 50-config.py 60-database.sh 99-run.sh /startup/
 
+# OMERO.py plugins
+RUN pip install \
+    omero-cli-render==0.3.1 \
+    omero-metadata==0.2.2
+
 USER omero-server
 
 # Remove overly strict OMERO permissions check
