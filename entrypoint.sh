@@ -1,6 +1,7 @@
-#!/usr/local/bin/dumb-init /bin/bash
+#!/bin/bash
 
 set -e
+. /opt/conda/bin/activate
 
 for f in /startup/*; do
     if [ -f "$f" -a -x "$f" ]; then

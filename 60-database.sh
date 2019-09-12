@@ -5,9 +5,9 @@
 
 set -eu
 
-omero=/opt/omero/server/OMERO.server/bin/omero
-omego=/opt/omero/omego/bin/omego
-cd /opt/omero/server
+omero=omero-server
+omego=omego
+cd /tmp
 
 CONFIG_omero_db_host=${CONFIG_omero_db_host:-}
 if [ -n "$CONFIG_omero_db_host" ]; then
@@ -38,8 +38,8 @@ echo "postgres connection established"
 psql -w -h "$DBHOST" -U "$DBUSER" "$DBNAME" -c \
     "select * from dbpatch" 2> /dev/null && {
     echo "Upgrading database"
-    $omego db upgrade --serverdir=OMERO.server
+    $omego db upgrade --serverdir=/opt/omero/server/OMERO.server
 } || {
     echo "Initialising database"
-    $omego db init --rootpass "$ROOTPASS" --serverdir=OMERO.server
+    $omego db init --rootpass "$ROOTPASS" --serverdir=/opt/omero/server/OMERO.server
 }

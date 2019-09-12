@@ -4,16 +4,16 @@
 #    Variable names should replace "." with "_" and "_" with "__"
 #    E.g. CONFIG_omero_web_public_enabled=false
 
+from glob import glob
 import os
 from subprocess import call
 from re import sub
 
 
-CONFIG_OMERO = '/opt/omero/server/config/omero-server-config-update.sh'
-OMERO = '/opt/omero/server/OMERO.server/bin/omero'
+OMERO = 'omero-server'
 
-if os.access(CONFIG_OMERO, os.X_OK):
-    rc = call([CONFIG_OMERO])
+for f in glob('/opt/omero/server/config/*.omero'):
+    rc = call([OMERO, 'load', f])
     assert rc == 0
 
 for (k, v) in os.environ.iteritems():

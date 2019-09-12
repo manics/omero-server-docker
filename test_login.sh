@@ -7,7 +7,7 @@ set -x
 # Must be exported by the caller:
 # OMERO_USER OMERO_PASS PREFIX
 
-OMERO=/opt/omero/server/OMERO.server/bin/omero
+OMERO=/opt/conda/bin/omero
 
 # Wait up to 2 mins
 i=0

@@ -1,36 +1,38 @@
-FROM centos:centos7
+FROM continuumio/miniconda:4.7.10
 LABEL maintainer="ome-devel@lists.openmicroscopy.org.uk"
 LABEL org.opencontainers.image.created="unknown"
 LABEL org.opencontainers.image.revision="unknown"
-LABEL org.opencontainers.image.source="https://github.com/openmicroscopy/omero-server-docker"
+LABEL org.opencontainers.image.source="https://github.com/ome/omero-server-docker"
 
-RUN mkdir /opt/setup
-WORKDIR /opt/setup
-ADD playbook.yml requirements.yml /opt/setup/
+# https://jcrist.github.io/conda-docker-tips.html
+RUN conda install -y -c manics -c manics/label/testing \
+    nomkl \
+    omero-dropbox \
+    omero-server \
+    tini && \
+    pip install omego && \
+    conda clean -afy && \
+    rm -rf /opt/conda/opt/omero/server/OMERO.server/lib/client && \
+    ln -sf server /opt/conda/opt/omero/server/OMERO.server/lib/client
+    # client and server Jars are duplicated, save space by symlinking
 
-RUN yum -y install epel-release \
-    && yum -y install ansible sudo \
-    && ansible-galaxy install -p /opt/setup/roles -r requirements.yml
+RUN useradd -m -s /bin/bash omero-server && \
+    mkdir /opt/conda/opt/omero/server/OMERO.server/var && \
+    chown -R omero-server \
+        /opt/conda/opt/omero/server/OMERO.server/etc \
+        /opt/conda/opt/omero/server/OMERO.server/var && \
+    ln -s /opt/conda/opt/omero /opt/omero
 
-ARG OMERO_VERSION=latest
-ARG OMEGO_ADDITIONAL_ARGS=
-RUN ansible-playbook playbook.yml \
-    -e omero_server_release=$OMERO_VERSION \
-    -e omero_server_omego_additional_args="$OMEGO_ADDITIONAL_ARGS"
+# FIXME: omero assumes required files are in OMERO.server/lib/python
+RUN ln -s /opt/conda/lib/python2.7/site-packages /opt/conda/opt/omero/server/OMERO.server/lib/python
 
-RUN curl -L -o /usr/local/bin/dumb-init \
-    https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64 && \
-    chmod +x /usr/local/bin/dumb-init
 ADD entrypoint.sh /usr/local/bin/
 ADD 50-config.py 60-database.sh 99-run.sh /startup/
 
+RUN install -o omero-server -g omero-server -d /OMERO
 USER omero-server
 
-# Fixed in 5.5.0 https://github.com/openmicroscopy/openmicroscopy/pull/5949
-RUN sed -i.bak -re \
-    's/(name="omero.fs.importArgs"\s+value=)""/\1"--no-upgrade-check"/' \
-    /opt/omero/server/OMERO.server/etc/templates/grid/templates.xml
 EXPOSE 4063 4064
 VOLUME ["/OMERO", "/opt/omero/server/OMERO.server/var"]
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/opt/conda/bin/tini", "/bin/bash", "/usr/local/bin/entrypoint.sh"]
