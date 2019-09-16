@@ -36,8 +36,15 @@ RUN /usr/sbin/adduser -S omero-server && \
 # FIXME: omero assumes required files are in OMERO.server/lib/python
 RUN ln -s /opt/conda/lib/python2.7/site-packages /opt/conda/opt/omero/server/OMERO.server/lib/python
 
+RUN mkdir /opt/omero/server/config
+ADD 00-omero-server.omero /opt/omero/server/config/
+
 ADD entrypoint.sh /usr/local/bin/
-ADD 50-config.py 60-database.sh 99-run.sh /startup/
+ADD 40-selfsignedcerts.sh \
+    50-config.py \
+    60-database.sh \
+    99-run.sh \
+    /startup/
 
 USER omero-server
 
