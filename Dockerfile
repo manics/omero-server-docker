@@ -47,6 +47,7 @@ ADD 40-selfsignedcerts.sh \
     /startup/
 
 USER omero-server
+ENV PATH /opt/conda/bin:/bin:/sbin:/usr/bin
 
 EXPOSE 4063 4064
 VOLUME ["/OMERO", "/opt/omero/server/OMERO.server/var"]

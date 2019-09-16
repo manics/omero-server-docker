@@ -7,7 +7,7 @@ set -x
 # Must be exported by the caller:
 # OMERO_USER OMERO_PASS PREFIX
 
-OMERO=/opt/conda/bin/omero
+OMERO=omero
 FILENAME=$(date +%Y%m%d-%H%M%S-%N).fake
 docker exec $PREFIX-server sh -c \
     "mkdir -p /OMERO/DropBox/root && touch /OMERO/DropBox/root/$FILENAME"

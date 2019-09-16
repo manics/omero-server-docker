@@ -7,7 +7,8 @@ set -x
 # Must be exported by the caller:
 # OMERO_USER OMERO_PASS PREFIX
 
-OMERO=/opt/conda/bin/omero
+# Need jars which are in the server bundle
+OMERO=omero-server
 DSNAME=$(date +%Y%m%d-%H%M%S-%N)
 FILENAME=$(date +%Y%m%d-%H%M%S-%N).fake
 SCRIPT=/omero/util_scripts/Dataset_To_Plate.py
