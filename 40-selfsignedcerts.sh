@@ -12,7 +12,7 @@ cd "$CERTDIR"
 
 if [ -f server.p12 -a -f server.pem -a -f server.key ]; then
     echo "Certificates already exist, not overwriting"
-    exit 2
+    exit
 fi
 
 openssl req -new -nodes -x509 -subj "$OWNER/CN=$CN" -days $DAYS -keyout server.key -out server.pem -extensions v3_ca

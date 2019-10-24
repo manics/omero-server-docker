@@ -10,13 +10,13 @@ from subprocess import call
 from re import sub
 
 
-OMERO = 'omero-server'
+OMERO = 'omero'
 
 for f in glob('/opt/omero/server/config/*.omero'):
     rc = call([OMERO, 'load', f])
     assert rc == 0
 
-for (k, v) in os.environ.iteritems():
+for (k, v) in os.environ.items():
     if k.startswith('CONFIG_'):
         prop = k[7:]
         prop = sub('([^_])_([^_])', r'\1.\2', prop)

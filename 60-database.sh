@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 # 50-config.py or equivalent must be run first to set all omero.db.*
 # omero.db.host may require special handling since the default is
 # to use `--link postgres:db`
 
 set -eu
 
-omero=omero-server
+omero=omero
 omego=omego
 cd /tmp
 

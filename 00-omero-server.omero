@@ -9,3 +9,7 @@ config set omero.glacier2.IceSSL.DefaultDir /opt/omero/server/OMERO.server/var/c
 config set omero.glacier2.IceSSL.CAs server.pem
 config set omero.glacier2.IceSSL.CertFile server.p12
 config set omero.glacier2.IceSSL.Password secret
+
+# https://github.com/ome/openmicroscopy/blob/v5.5.1/etc/omero.properties#L144-L151
+config set omero.glacier2.IceSSL.ProtocolVersionMax TLS1_2
+config set omero.glacier2.IceSSL.Protocols "TLS1_0, TLS1_1, TLS1_2"

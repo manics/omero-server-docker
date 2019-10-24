@@ -1,40 +1,55 @@
-FROM continuumio/miniconda:4.7.10-alpine
+FROM continuumio/miniconda3:4.7.12
 
 LABEL maintainer="ome-devel@lists.openmicroscopy.org.uk"
 LABEL org.opencontainers.image.created="unknown"
 LABEL org.opencontainers.image.revision="unknown"
 LABEL org.opencontainers.image.source="https://github.com/ome/omero-server-docker"
 
+# Some conda packages assume bash
+
+SHELL ["/bin/bash", "-c"]
+WORKDIR /opt/omero/server
+
 # https://jcrist.github.io/conda-docker-tips.html
-
-# alpine image has default user anaconda instead of root, need to cd
-# to a writeable directory for tmp files
-RUN cd && \
-    . /opt/conda/bin/activate && \
-    conda install -y -c manics -c manics/label/testing \
+RUN . /opt/conda/bin/activate && \
+    conda install -y -c manics \
     nomkl \
-    omero-dropbox \
-    omero-server \
-    tini && \
-    pip install omego && \
-    conda clean -afy && \
-    rm -rf /opt/conda/opt/omero/server/OMERO.server/lib/client && \
-    ln -sf server /opt/conda/opt/omero/server/OMERO.server/lib/client
-    # client and server Jars are duplicated, save space by symlinking
+    numpy \
+    openjdk=8 \
+    pillow \
+    pip \
+    postgresql \
+    python=3.6 \
+    pytables \
+    pyyaml \
+    tini \
+    zeroc-ice=3.6.5 && \
+    conda clean -afy
 
-USER root
-RUN /usr/sbin/adduser -S omero-server && \
-    /usr/sbin/addgroup -S omero-server && \
-    /usr/sbin/addgroup omero-server omero-server && \
-    mkdir /opt/conda/opt/omero/server/OMERO.server/var && \
+RUN . /opt/conda/bin/activate && \
+    pip install \
+        https://github.com/ome/omego/archive/v0.7.0.dev1.tar.gz \
+        https://github.com/snoopycrimecop/omero-py/archive/323c85c347f23ca67ea72380ccad720e90fc7559.zip && \
+    omego download --ci https://merge-ci.openmicroscopy.org/jenkins --branch OMERO-build server --sym auto && \
+    rm -rf /opt/omero/server/OMERO.server/lib/python
+
+# client and server Jars are duplicated, save space by symlinking
+# RUN ln -sf server /opt/conda/opt/omero/server/OMERO.server/lib/client
+
+RUN rm -rf /opt/omero/server/OMERO.server/var && \
+    /usr/sbin/addgroup --system omero-server && \
+    /usr/sbin/adduser \
+        --system omero-server \
+        --ingroup omero-server \
+        --shell /bin/bash \
+        --home /opt/omero/server/OMERO.server/var && \
+    install -o omero-server -g omero-server -d /OMERO && \
+    install -o omero-server -d /var/log/omero-server && \
+    ln -s /var/log/omero-server /opt/omero/server/OMERO.server/var/log && \
     chown -R omero-server \
-        /opt/conda/opt/omero/server/OMERO.server/etc \
-        /opt/conda/opt/omero/server/OMERO.server/var && \
-    ln -s /opt/conda/opt/omero /opt/omero && \
-    install -o omero-server -g omero-server -d /OMERO
+        /opt/omero/server/OMERO.server/etc \
+        /opt/omero/server/OMERO.server/var/log
 
-# FIXME: omero assumes required files are in OMERO.server/lib/python
-RUN ln -s /opt/conda/lib/python2.7/site-packages /opt/conda/opt/omero/server/OMERO.server/lib/python
 
 RUN mkdir /opt/omero/server/config
 ADD 00-omero-server.omero /opt/omero/server/config/
@@ -47,9 +62,11 @@ ADD 40-selfsignedcerts.sh \
     /startup/
 
 USER omero-server
-ENV PATH /opt/conda/bin:/bin:/sbin:/usr/bin
+ENV OMERODIR /opt/omero/server/OMERO.server
+# ENV PATH /opt/conda/bin:/bin:/sbin:/usr/bin
 
 EXPOSE 4063 4064
-VOLUME ["/OMERO", "/opt/omero/server/OMERO.server/var"]
+# VOLUME ["/OMERO", "/opt/omero/server/OMERO.server/var"]
+VOLUME ["/OMERO"]
 
 ENTRYPOINT ["/opt/conda/bin/tini", "/bin/sh", "/usr/local/bin/entrypoint.sh"]
