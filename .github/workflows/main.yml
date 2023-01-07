@@ -4,46 +4,65 @@ name: Build
 on: 
   push:
   pull_request:
-  schedule:
-    - cron: '0 0 * * 0'
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  # Set to "" to publish container on tags only
+  # Set to "<branch-name>" to also publish on every push to <branch-name>
+  PUBLISH_BRANCH: "ubuntu"
+  # PLATFORMS: linux/amd64,linux/arm64
+  PLATFORMS: linux/amd64
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Test
         run: ./test.sh
+
   upload:
     needs: build
-    if: startsWith(github.ref, 'refs/tags')
     runs-on: ubuntu-latest
-    env:
-      name: openmicroscopy/omero-server
     steps:
-      - name: Get prefix
-        id: getprefix
-        run: |
-          if [ ! -z ${{ env.name }} ]; then
-            echo "prefix=${{ env.name }}:" >> $GITHUB_OUTPUT
-          else
-            echo "prefix=${{ github.repository }}:" >> $GITHUB_OUTPUT
-          fi
+
       - name: Get other tags
         id: gettags
-        uses: jupyterhub/action-major-minor-tag-calculator@v1.1.0
+        uses: jupyterhub/action-major-minor-tag-calculator@v2
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          prefix: "${{ steps.getprefix.outputs.prefix }}"
+          prefix: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to container registry
+        uses: docker/login-action@v2
+        if: >
+          github.event_name == 'push' &&
+          (github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) ||
+          startsWith(github.ref, 'refs/tags/'))
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Push to Docker Hub
-        uses: docker/build-push-action@v2
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push to container registry
+        uses: docker/build-push-action@v3
         with:
+          platforms: ${{ env.PLATFORMS }}
           tags: ${{ join(fromJson(steps.gettags.outputs.tags)) }}
-          push: true
+          push: >
+            ${{
+              github.event_name == 'push' &&
+              github.ref == format('refs/heads/{0}', env.PUBLISH_BRANCH) ||
+              startsWith(github.ref, 'refs/tags/')
+            }}
