@@ -1,0 +1,2 @@
+config drop default
+certificates -v
