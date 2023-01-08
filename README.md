@@ -1,7 +1,18 @@
 OMERO.server Docker
 ===================
 
-[![Actions Status](https://github.com/ome/omero-server-docker/workflows/Build/badge.svg)](https://github.com/ome/omero-server-docker/actions)
+[![Actions Status](https://github.com/manics/omero-server-docker/workflows/Build/badge.svg)](https://github.com/manics/omero-server-docker/actions)
+
+This is a fork of https://github.com/ome/omero-server-docker
+that provides a Ubuntu 22.04 based Docker image for OMERO.server, built for AMD64 and ARM64.
+
+Prebuilt multi-arch images are available from https://github.com/manics/omero-server-docker/pkgs/container/omero-server-docker
+
+```
+docker pull ghcr.io/manics/omero-server-docker:ubuntu
+```
+
+---
 
 A CentOS 7 based Docker image for OMERO.server. The administrator account is named "root" with a
 default password of "omero". This can be changed by setting the `ROOTPASS` environment variable.

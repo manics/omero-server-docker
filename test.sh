@@ -20,7 +20,7 @@ ci_group_end() {
 }
 
 cleanup() {
-    docker logs $PREFIX-server
+    docker logs $PREFIX-server || echo "Failed to get logs"
     docker rm -f -v $PREFIX-db $PREFIX-server
     docker network rm $PREFIX-omero || true
 }
