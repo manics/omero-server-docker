@@ -15,8 +15,7 @@ env:
   # Set to "" to publish container on tags only
   # Set to "<branch-name>" to also publish on every push to <branch-name>
   PUBLISH_BRANCH: "ubuntu"
-  # PLATFORMS: linux/amd64,linux/arm64
-  PLATFORMS: linux/amd64
+  PLATFORMS: linux/amd64,linux/arm64
 
 jobs:
   build:
