@@ -50,6 +50,7 @@ ENV OMERODIR=/opt/omero/server/OMERO.server/
 RUN . ./venv3/bin/activate && \
     omego install --no-start --no-web --ignoreconfig --release $OMERO_VERSION
 
+ADD bin-omero.sh /opt/omero/server/OMERO.server/bin/omero
 ADD entrypoint.sh /usr/local/bin/
 ADD 50-config.py 60-database.sh 99-run.sh /startup/
 ADD 00-omero-server.omero /opt/omero/server/config/
