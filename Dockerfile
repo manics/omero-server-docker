@@ -1,4 +1,4 @@
-FROM ghcr.io/manics/omero-ice-docker:main-ubuntu2204 AS ice-builder
+FROM ghcr.io/manics/omero-ice-docker:3.6.5-0-ubuntu2204 AS ice-builder
 
 ################################################################################
 
