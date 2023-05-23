@@ -50,7 +50,7 @@ py-cpuinfo==9.0.0
     # via tables
 pyyaml==6.0
     # via omero-py
-requests==2.28.1
+requests==2.31.0
     # via omero-py
 six==1.16.0
     # via yaclifw
