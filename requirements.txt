@@ -8,23 +8,23 @@ appdirs==1.4.4
     # via omero-py
 blosc2==2.0.0
     # via tables
-certifi==2022.12.7
+certifi==2023.7.22
     # via requests
-charset-normalizer==2.1.1
+charset-normalizer==3.2.0
     # via requests
-cython==0.29.33
+cython==3.0.0
     # via tables
-future==0.18.2
+future==0.18.3
     # via
     #   omego
     #   omero-py
 idna==3.4
     # via requests
-msgpack==1.0.4
+msgpack==1.0.5
     # via blosc2
 numexpr==2.8.4
     # via tables
-numpy==1.24.1
+numpy==1.25.1
     # via
     #   numexpr
     #   omero-py
@@ -35,28 +35,28 @@ omero-certificates==0.2.0
     # via omero-server
 omero-dropbox==5.6.2
     # via -r requirements.in
-omero-py==5.13.1
+omero-py==5.14.0
     # via
     #   omero-certificates
     #   omero-dropbox
     #   omero-server
 omero-server==0.2.0
     # via -r requirements.in
-packaging==22.0
+packaging==23.1
     # via tables
-pillow==9.4.0
+pillow==10.0.0
     # via omero-py
 py-cpuinfo==9.0.0
     # via tables
-pyyaml==6.0
+pyyaml==6.0.1
     # via omero-py
-requests==2.28.1
+requests==2.31.0
     # via omero-py
 six==1.16.0
     # via yaclifw
 tables==3.8.0
     # via omero-server
-urllib3==1.26.13
+urllib3==2.0.4
     # via requests
 yaclifw==0.2.0
     # via omego
