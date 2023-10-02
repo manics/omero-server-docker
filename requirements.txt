@@ -10,41 +10,45 @@ blosc2==2.0.0
     # via tables
 certifi==2023.7.22
     # via requests
-charset-normalizer==3.2.0
+charset-normalizer==3.3.0
     # via requests
-cython==3.0.0
+cython==3.0.2
     # via tables
+distro==1.8.0
+    # via omero-certificates
 future==0.18.3
     # via
     #   omego
     #   omero-py
 idna==3.4
     # via requests
-msgpack==1.0.5
+msgpack==1.0.7
     # via blosc2
-numexpr==2.8.4
+numexpr==2.8.7
     # via tables
-numpy==1.25.1
+numpy==1.26.0
     # via
     #   numexpr
     #   omero-py
     #   tables
 omego==0.7.0
     # via -r requirements.in
-omero-certificates==0.2.0
+omero-certificates==0.3.0
     # via omero-server
 omero-dropbox==5.6.2
     # via -r requirements.in
-omero-py==5.14.0
+omero-py==5.16.0
     # via
     #   omero-certificates
     #   omero-dropbox
     #   omero-server
 omero-server==0.2.0
     # via -r requirements.in
-packaging==23.1
+packaging==23.2
     # via tables
-pillow==10.0.0
+pillow==10.0.1
+    # via omero-py
+portalocker==2.8.2
     # via omero-py
 py-cpuinfo==9.0.0
     # via tables
@@ -56,8 +60,10 @@ six==1.16.0
     # via yaclifw
 tables==3.8.0
     # via omero-server
-urllib3==2.0.4
-    # via requests
+urllib3==1.26.17
+    # via
+    #   omero-py
+    #   requests
 yaclifw==0.2.0
     # via omego
 zeroc-ice==3.6.5
