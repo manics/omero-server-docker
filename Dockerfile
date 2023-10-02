@@ -30,7 +30,7 @@ RUN ln -s /opt/Ice-3.6.5/bin/* /usr/local/bin/ && \
     done && \
     ldconfig
 
-ARG OMERO_VERSION=5.6.7
+ARG OMERO_VERSION=5.6.9
 ARG OMERO_SERVER_UID=1000
 
 RUN mkdir /opt/omero /OMERO && \
