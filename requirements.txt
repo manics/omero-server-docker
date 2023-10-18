@@ -60,7 +60,7 @@ six==1.16.0
     # via yaclifw
 tables==3.8.0
     # via omero-server
-urllib3==1.26.17
+urllib3==1.26.18
     # via
     #   omero-py
     #   requests
